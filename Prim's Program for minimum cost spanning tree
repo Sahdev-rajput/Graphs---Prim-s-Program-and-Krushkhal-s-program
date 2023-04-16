@@ -1,0 +1,75 @@
+#include <iostream>
+using namespace std;
+#define I INT_MAX
+int near[7] = { I,I,I,I,I,I,I };
+int Cost[7][7] = { {I,I,I,I,I,I,I},
+{I,I,5,6,I,I,I} ,
+{I,5,I,I,10,I,I},
+{I,I,I,I,13,25,15} ,
+{I,I,10,13,I,4,I} ,
+{I,I,I,25,4,I,9} ,
+{I,I,I,15,I,9,I} };
+int t[2][5];
+int main()
+{
+	int i, j, k=0, u, v, n = 6, min=I;
+	for (i = 1; i <= n; i++)
+	{
+		for (j = i; j <= n; j++)
+		{
+			if (Cost[i][j] < min)
+			{
+				min = Cost[i][j];
+				u = i;
+				v = j;
+			}
+		}
+	}
+	near[u] = 0;
+	near[v] = 0;
+	t[0][0] = u;
+	t[1][0] = v;
+	for (i = 1; i <= n; i++)
+	{
+		if (near[i] != 0)
+		{
+			if (Cost[i][u] < Cost[i][v])
+			{
+				near[i] = u;
+			}
+			else
+			{
+				near[i] = v;
+			}
+		}
+	}
+	i = 1;
+	while (i < n - 1)
+	{
+		int mi=I;
+		for (j = 1; j <= n; j++)
+		{
+			if (near[j] != 0 && Cost[j][near[j]] < mi)
+			{
+				mi = Cost[j][near[j]];
+				k = j;
+			}
+		}
+		t[0][i] = k;
+		t[1][i] = near[k];
+		near[k] = 0;
+		for (j = 1; j <= n; j++)
+		{
+			if (near[j]!=0 && Cost[j][near[j]] > Cost[j][k])
+			{
+				near[j] = k;
+			}
+		}
+		i++;
+	}
+	for (i = 0; i < n - 1; i++)
+	{
+		cout << "(" << t[0][i] << "," << t[1][i] << ")" << endl;
+	}
+
+}
