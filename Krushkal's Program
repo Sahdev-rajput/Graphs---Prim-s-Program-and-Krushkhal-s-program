@@ -1,0 +1,74 @@
+#include <iostream>
+#define I -1
+#define mi INT_MAX
+using namespace std;
+int edges[3][8] = { {1,2,5,4,4,6,3,1},
+	{2,5,7,5,6,7,6,3},
+	{5,25,12,9,15,8,13,20} };
+int visited[9] = { 0 };
+int H[8] = { I,I,I,I,I,I,I,I };
+int t[2][6];
+void union_sets(int u, int v)
+{
+	if (H[u] < H[v])
+	{
+		H[u] += H[v];
+		H[v] = u;
+	}
+	else
+	{
+		H[v] += H[u];
+		H[u] = v;
+	}
+}
+int find(int u)
+{
+	int v = 0;
+	int x = u;
+	while (H[x] > 0)
+	{
+		x = H[x];
+	}
+	while (u != x)
+	{
+		v = H[u];
+		H[u] = x;
+		u = v;
+	}
+	return x;
+}
+int main()
+{
+	int n = 7;
+	int i = 0;
+	int j,k,u,v;
+	int min;
+	while (i < n - 1)
+	{
+		min = mi;
+		for (j = 0; j < n; j++)
+		{
+			if (visited[j] == 0 && edges[2][j] < min)
+			{
+				k = j;
+				min = edges[2][j];
+				u = edges[0][j];
+				v = edges[1][j];
+
+			}
+		}
+		if (find(u) != find(v))
+		{
+			t[0][i] = u;
+			t[1][i] = v;
+			union_sets(find(u), find(v));
+			i++;
+		}
+		visited[k] = 1;
+	}
+		for (int l = 0; l < 6; l++)
+		{
+			cout << "(" << t[0][l] << "," << t[1][l] << ")" << endl;
+		}
+
+	}
